@@ -26,8 +26,8 @@ architecture top_basys3_arch of top_basys3 is
 
     -- signal declarations
     signal w_clk_div : std_logic;
-    signal w_floor1 : std_logic_vector(3 downto 0);
-    signal w_floor2 : std_logic_vector(3 downto 0);
+    signal w_fsm1 : std_logic_vector(3 downto 0);
+    signal w_fsm2 : std_logic_vector(3 downto 0);
     signal w_seg1 : std_logic_vector(6 downto 0);
     signal w_seg2 : std_logic_vector(6 downto 0);
     signal w_tdm_data : std_logic_vector(3 downto 0);
@@ -84,7 +84,7 @@ begin
             i_reset => w_reset_fsm,
             is_stopped => sw(0),
             go_up_down => sw(1),
-            o_floor => w_floor1
+            o_floor => w_fsm1
         );
      fsm2_inst: elevator_controller_fsm
         port map (
@@ -92,7 +92,7 @@ begin
             i_reset => w_reset_fsm,
             is_stopped => sw(14),
             go_up_down => sw(15),
-            o_floor => w_floor2
+            o_floor => w_fsm2
         );
         clk_div_inst : clock_divider
             generic map (k_DIV => 25000000)
@@ -103,12 +103,12 @@ begin
         );
        seg1_inst : sevenseg_decoder
             port map (
-                i_Hex => w_floor1,
+                i_Hex => w_fsm1,
                 o_seg_n => w_seg1
              );
         seg2_inst : sevenseg_decoder
             port map (
-                i_Hex => w_floor2,
+                i_Hex => w_fsm2,
                 o_seg_n => w_seg2
              ); 
          tdm_inst : TDM4
